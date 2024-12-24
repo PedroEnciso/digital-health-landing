@@ -15,6 +15,7 @@ import {
 import { ContactUsButton } from "./contact-us-button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import PillLabel from "@/components/ui/pill-label";
 import {
   Dialog,
   DialogContent,
@@ -57,11 +58,11 @@ const products = [
   },
 ];
 
-const PillLabel = ({ children }: { children: React.ReactNode }) => (
-  <span className="inline-block px-3 py-1 text-[10px] font-medium tracking-wider text-blue-700 uppercase bg-blue-100 border border-blue-200 rounded font-mono">
-    {children}
-  </span>
-);
+// const PillLabel = ({ children }: { children: React.ReactNode }) => (
+//   <span className="inline-block px-3 py-1 text-[10px] font-medium tracking-wider text-blue-700 uppercase bg-blue-100 border border-blue-200 rounded font-mono">
+//     {children}
+//   </span>
+// );
 
 export default function Process() {
   const [isOpen, setIsOpen] = useState(false);

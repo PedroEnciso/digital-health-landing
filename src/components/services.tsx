@@ -10,7 +10,7 @@ import {
   ChevronLeft,
   ChevronRight,
 } from "lucide-react";
-import { ForwardRefExoticComponent, RefAttributes, useState } from "react";
+import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import PillLabel from "@/components/ui/pill-label";
 
 const services = [
   {
@@ -46,12 +47,6 @@ const services = [
       "https://kzmlukdaifbgkxdx7fwk.lite.vusercontent.net/placeholder.svg?height=400&width=400",
   },
 ];
-
-const PillLabel = ({ children }: { children: React.ReactNode }) => (
-  <span className="inline-block px-3 py-1 text-[10px] font-medium tracking-wider text-blue-700 uppercase bg-blue-100 border border-blue-200 rounded font-mono">
-    {children}
-  </span>
-);
 
 export default function Services() {
   const [isOpen, setIsOpen] = useState(false);
