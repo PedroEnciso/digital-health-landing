@@ -1,41 +1,59 @@
 "use client";
 
-import { Card, CardContent } from "@/components/ui/card";
+import React, { useState } from "react";
+import Image from "next/image";
+import Link from "next/link";
 import {
   Sparkles,
   FileText,
   Smartphone,
   Globe,
   PlayCircle,
+  ChevronRight,
+  ChevronLeft,
 } from "lucide-react";
 import { ContactUsButton } from "./contact-us-button";
-import Link from "next/link";
-import React, { useState } from "react";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+} from "@/components/ui/dialog";
 
 const products = [
   {
     title: "AI-enhanced experiences",
     description: "Integrate AI into existing features",
     icon: <Sparkles className="h-6 w-6 text-blue-600" />,
-    color: "text-blue-700",
+    features: ["Durable", "Versatile", "Energy-efficient"],
+    image:
+      "https://kzmlukdaifbgkxdx7fwk.lite.vusercontent.net/placeholder.svg?height=400&width=400",
   },
   {
     title: "Interactive IFUs",
     description: "AI-powered instructions for use",
     icon: <FileText className="h-6 w-6 text-blue-600" />,
-    color: "text-blue-700",
+    features: ["Durable", "Versatile", "Energy-efficient"],
+    image:
+      "https://kzmlukdaifbgkxdx7fwk.lite.vusercontent.net/placeholder.svg?height=400&width=400",
   },
   {
     title: "Companion App Framework",
     description: "Custom companion apps for Medical Devices",
     icon: <Smartphone className="h-6 w-6 text-blue-600" />,
-    color: "text-blue-700",
+    features: ["Durable", "Versatile", "Energy-efficient"],
+    image:
+      "https://kzmlukdaifbgkxdx7fwk.lite.vusercontent.net/placeholder.svg?height=400&width=400",
   },
   {
     title: "Digital Health Portal",
     description: "Dynamic portals for Patients or Providers",
     icon: <Globe className="h-6 w-6 text-blue-600" />,
-    color: "text-blue-700",
+    features: ["Durable", "Versatile", "Energy-efficient"],
+    image:
+      "https://kzmlukdaifbgkxdx7fwk.lite.vusercontent.net/placeholder.svg?height=400&width=400",
   },
 ];
 
@@ -46,7 +64,16 @@ const PillLabel = ({ children }: { children: React.ReactNode }) => (
 );
 
 export default function Process() {
-  const [activeProduct, setActiveProduct] = useState<number | null>(null);
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentProduct, setCurrentProduct] = useState(0);
+
+  const nextProduct = () => {
+    setCurrentProduct((prev) => (prev + 1) % products.length);
+  };
+
+  const prevProduct = () => {
+    setCurrentProduct((prev) => (prev - 1 + products.length) % products.length);
+  };
 
   return (
     <section
@@ -79,11 +106,7 @@ export default function Process() {
             </div>
             <p className="text-sm text-blue-800 mb-6">- JD Moore from DH.D</p>
             <div className="flex items-center space-x-4">
-              <ContactUsButton
-                label="Watch Demo"
-                icon={PlayCircle}
-                // className="bg-blue-600 text-white hover:bg-blue-700"
-              />
+              <ContactUsButton label="Watch Demo" icon={PlayCircle} />
               <Link
                 href="#"
                 className="text-blue-600 hover:text-blue-700 transition-colors"
@@ -97,52 +120,24 @@ export default function Process() {
               <Card
                 key={index}
                 className={`bg-white border border-blue-200 transition-all duration-300 ease-in-out cursor-pointer hover:bg-blue-50`}
-                onMouseDown={() => setActiveProduct(index)}
-                onMouseUp={() => setActiveProduct(null)}
-                onMouseLeave={() => setActiveProduct(null)}
-                onKeyDown={(e) => {
-                  if (e.key === "Enter" || e.key === " ") {
-                    e.preventDefault();
-                    setActiveProduct(index);
-                  }
-                }}
-                onKeyUp={() => setActiveProduct(null)}
-                tabIndex={0}
                 role="button"
-                aria-pressed={activeProduct === index}
+                onClick={() => {
+                  setCurrentProduct(index);
+                  setIsOpen(true);
+                }}
               >
                 <CardContent className="flex items-start p-4 lg:p-6">
-                  <div
-                    className={`p-2 lg:p-3 rounded-lg mr-3 lg:mr-4 shrink-0 transition-colors duration-300 ${
-                      activeProduct === index ? "bg-blue-100" : "bg-blue-50"
-                    }`}
-                  >
+                  <div className="p-2 lg:p-3 rounded-lg mr-3 lg:mr-4 shrink-0 transition-colors duration-300 bg-blue-50">
                     {React.cloneElement(product.icon, {
-                      className: `h-6 w-6 ${
-                        activeProduct === index
-                          ? "text-blue-700"
-                          : "text-blue-600"
-                      }`,
+                      className: `h-6 w-6 text-blue-600`,
                       "aria-hidden": "true",
                     })}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <h3
-                      className={`font-semibold mb-1 text-base lg:text-lg ${
-                        activeProduct === index
-                          ? "text-blue-800"
-                          : product.color
-                      }`}
-                    >
+                    <h3 className="font-semibold mb-1 text-base lg:text-lg text-blue-700">
                       {product.title}
                     </h3>
-                    <p
-                      className={`text-xs lg:text-sm ${
-                        activeProduct === index
-                          ? "text-blue-700"
-                          : "text-blue-600"
-                      }`}
-                    >
+                    <p className="text-xs lg:text-sm text-blue-600">
                       {product.description}
                     </p>
                   </div>
@@ -152,6 +147,68 @@ export default function Process() {
           </div>
         </div>
       </div>
+
+      <Dialog open={isOpen} onOpenChange={setIsOpen}>
+        <DialogContent className="max-w-4xl w-full">
+          <div className="relative">
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute left-0 top-1/2 -translate-y-1/2 z-10"
+              onClick={prevProduct}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              className="absolute right-0 top-1/2 -translate-y-1/2 z-10"
+              onClick={nextProduct}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
+
+            <div className="grid md:grid-cols-2 gap-6 p-6">
+              <div>
+                <Image
+                  src={products[currentProduct].image}
+                  alt={products[currentProduct].title}
+                  width={400}
+                  height={400}
+                  className="w-full h-auto"
+                />
+              </div>
+              <div>
+                <DialogTitle className="text-2xl font-bold mb-2">
+                  {products[currentProduct].title}
+                </DialogTitle>
+                <DialogDescription className="text-gray-600 mb-4">
+                  {products[currentProduct].description}
+                </DialogDescription>
+                <h3 className="text-xl font-semibold mb-2">Features:</h3>
+                <ul className="list-disc list-inside mb-4">
+                  {products[currentProduct].features.map((feature, index) => (
+                    <li key={index}>{feature}</li>
+                  ))}
+                </ul>
+                <Button>Request Product</Button>
+              </div>
+            </div>
+
+            <div className="flex justify-center mt-4">
+              {products.map((_, index) => (
+                <div
+                  key={index}
+                  className={`w-3 h-3 rounded-full mx-1 cursor-pointer ${
+                    index === currentProduct ? "bg-primary" : "bg-gray-300"
+                  }`}
+                  onClick={() => setCurrentProduct(index)}
+                />
+              ))}
+            </div>
+          </div>
+        </DialogContent>
+      </Dialog>
     </section>
   );
 }
