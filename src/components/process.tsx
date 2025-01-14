@@ -22,6 +22,7 @@ import {
   DialogDescription,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useSwipeable } from "react-swipeable";
 
 const products = [
   {
@@ -58,12 +59,6 @@ const products = [
   },
 ];
 
-// const PillLabel = ({ children }: { children: React.ReactNode }) => (
-//   <span className="inline-block px-3 py-1 text-[10px] font-medium tracking-wider text-blue-700 uppercase bg-blue-100 border border-blue-200 rounded font-mono">
-//     {children}
-//   </span>
-// );
-
 export default function Process() {
   const [isOpen, setIsOpen] = useState(false);
   const [currentProduct, setCurrentProduct] = useState(0);
@@ -75,6 +70,13 @@ export default function Process() {
   const prevProduct = () => {
     setCurrentProduct((prev) => (prev - 1 + products.length) % products.length);
   };
+
+  const handlers = useSwipeable({
+    onSwipedLeft: nextProduct,
+    onSwipedRight: prevProduct,
+    preventScrollOnSwipe: true,
+    trackMouse: false,
+  });
 
   return (
     <section
@@ -151,7 +153,7 @@ export default function Process() {
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-4xl w-full">
-          <div className="relative">
+          <div className="relative" {...handlers}>
             <Button
               variant="outline"
               size="icon"

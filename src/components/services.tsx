@@ -19,6 +19,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { useSwipeable } from "react-swipeable";
 import PillLabel from "@/components/ui/pill-label";
 
 const services = [
@@ -59,6 +60,13 @@ export default function Services() {
   const prevService = () => {
     setCurrentService((prev) => (prev - 1 + services.length) % services.length);
   };
+
+  const handlers = useSwipeable({
+    onSwipedLeft: nextService,
+    onSwipedRight: prevService,
+    preventScrollOnSwipe: true,
+    trackMouse: false,
+  });
 
   return (
     <section
@@ -116,7 +124,7 @@ export default function Services() {
 
       <Dialog open={isOpen} onOpenChange={setIsOpen}>
         <DialogContent className="max-w-4xl w-full">
-          <div className="relative">
+          <div className="relative" {...handlers}>
             <Button
               variant="outline"
               size="icon"
